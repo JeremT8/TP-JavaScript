@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SWAPI - Star Wars API</title>
+	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<style>
+		#template {
+			display: none;
+		}
+	</style>
+</head>
+<body class="p-4">
+
+	<table class="table table-striped">
+	    <thead>
+		<tr>
+		    <td>Prénom</td>
+		    <td>Taille</td>
+		    <td>Poids</td>
+		    <td>Cheveux</td>
+		    <td>Genre</td>
+		</tr>
+	    </thead>
+	    <tbody>
+		<tr id="template">
+		    <td></td>
+		    <td></td>
+		    <td></td>
+		    <td></td>
+		    <td></td>
+		</tr>
+	    </tbody>
+	</table>
+    
+	<button id="b1" type="button" class="btn btn-dark" value="previous">Précédent</button>
+	<button id="b2" type="button" class="btn btn-dark" value="next">Suivant</button>
+
+
+
+	<footer>
+	<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="swapi.js"></script>
+	</footer>
+	
+    </body>
+</html>

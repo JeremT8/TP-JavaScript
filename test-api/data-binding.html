@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data binding</title>
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+
+        $.fn.bindTo = function (data) {
+            const elements = this.find("[data-binding-value]");
+            for (let elem of elements) {
+                let key = $(elem).data("binding-value");
+                if (key in data) {
+                    $(elem).html(data[key]);
+                }
+            }
+            return this;
+        }
+
+        const persons = [
+            { name: "Lennon", firstName: "John" },
+            { name: "Lovelace", firstName: "Ada" },
+            { name: "Collins", firstName: "Michael" }
+        ]
+
+        $(document).ready(function () {
+
+            for (p of persons) {
+                $template = $("#template").clone().removeAttr("id");
+                $template.bindTo(p);
+
+                $("body").append($template);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div id="template">
+        <p data-binding-value="name"></p>
+        <p data-binding-value="firstName"></p>
+    </div>
+
+</body>
+
+</html>

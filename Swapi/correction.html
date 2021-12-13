@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StarWars</title>
+    <link
+      rel="stylesheet"
+      href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body class="p-4">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Genre</th>
+          <th>Planete Natale</th>
+          <th>Nombre de film</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="template">
+          <td data-binding-value="name"></td>
+          <td data-binding-value="gender"></td>
+          <td data-binding-value="homeworld"></td>
+          <td data-binding-value="filmNumber"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="row justify-content-around">
+	<button type="button" id="prevButton" class="btn btn-primary col-3" style="margin: 10px ;">Previous</button>
+      	<button type="button" id="nextButton" class="btn btn-primary col-3" style="margin: 10px ;">Next</button>
+      
+    </div>
+    <footer>
+      <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+      <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script src="starwars.js"></script>
+    </footer>
+  </body>
+</html>
