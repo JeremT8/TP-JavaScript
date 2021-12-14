@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="FR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Articles JSON</title>
+    <link
+      rel="stylesheet"
+      href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="jquery-form-tool.js"></script>
+    <script>
+      const URL = "http://localhost:3000/articles";
+      let $rowTemplate;
+
+      // Fonction d'affichage de la liste des articles
+      function showArticles(data) {
+        const $shadowTbody = $("<tbody></tbody>");
+        for (item of data) {
+          const $row = $rowTemplate.clone();
+          $row.children().first().text(item.id)
+          .next().text(item.title)
+          .next().find(".delete").data("id", item.id);
+
+          $shadowTbody.append($row);
+        }
+        $("tbody").replaceWith($shadowTbody);
+      }
+
+      async function getArticles() {
+        const response = await fetch(URL);
+        const data = await response.json();
+        showArticles(data);
+      }
+
+        // Fontiond de suppression d'un article
+      async function deleteArticles(){
+        
+      }
+
+      $(document).ready(function () {
+        $rowTemplate = $("#template").clone().removeAttr("id");
+        getArticles();
+
+        // Traitement du formulaire
+        $("form").submit(async function (event) {
+          event.preventDefault();
+
+          const postedData = $(this).serializeObject();
+          console.log(postedData);
+
+           await fetch(URL, {
+            "method": "post",
+            headers: {
+              "Accept": "Application/json",
+              "Content-Type": "Application/json"
+            },
+            body: JSON.stringify(postedData),
+          });
+
+          getArticles();
+          deleteArticles();
+        });
+
+        // Traitement de la suppression
+        $("table").delegate(".delete", "click", function (event) {
+          const $row = $(this).closest("tr");
+          $row.hide(500, function () {
+            $row.remove();
+          });
+
+          // Suppression dans l'API
+          const id = $(this).data("id");
+
+          // envoie de la requete de suppression
+          fetch(URL + "/" +id , {
+            method: "delete",
+            headers: {
+              Accept: "application/json",
+              "content-type": "application/json"
+            }
+          })
+        });
+        /* Version JavaScript Vanilla 
+        document.querySelector("table").onclick = function(event){
+          console.log("table");
+          if (event.target.classList.contains("delete")) {
+            console.log("delete");
+          }
+        } */
+      });
+    </script>
+  </head>
+  <body class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="m-3 form">
+          <h2>Nouvel Article</h2>
+          <form method="get">
+            <div class="mb-3">
+              <label class="form-label">Titre</label>
+              <input
+                type="text"
+                class="form-control"
+                name="title"
+                placeholder="le titre"
+              />
+            </div>
+
+            <div class="mb-3">
+              <button type="submit" class="btn btn-primary w-100">
+                Valider
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Supprimer</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="template">
+              <td></td>
+              <td></td>
+              <td>
+                <button type="button" class="btn btn-danger delete">DILAITE</button>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "L'API Fetch en JavaScript"
+    },
+    {
+      "id": 2,
+      "title": "Le Go, faut-il y aller ?"
+    },
+    {
+      "title": "j'en ai marre",
+      "id": 3
+    }
+  ],
+  "authors": [
+    {
+      "id": 1,
+      "name": "Kent Beck"
+    },
+    {
+      "id": 2,
+      "name": "Martin Fowler"
+    }
+  ]
+}
