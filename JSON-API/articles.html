@@ -14,7 +14,10 @@
     <script src="jquery-form-tool.js"></script>
     <script>
       const URL = "http://localhost:3000/articles";
+      const AUTHOR_URL = "http://localhost:3000/authors";
+
       let $rowTemplate;
+      let chosenArticleId;
 
       // Fonction d'affichage de la liste des articles
       function showArticles(data) {
@@ -23,7 +26,9 @@
           const $row = $rowTemplate.clone();
           $row.children().first().text(item.id)
           .next().text(item.title)
-          .next().find(".delete").data("id", item.id);
+          .next().text(item.author.name)
+          .next().find(".delete").data("id", item.id)
+          .next().data("id", item.id);
 
           $shadowTbody.append($row);
         }
@@ -31,41 +36,68 @@
       }
 
       async function getArticles() {
-        const response = await fetch(URL);
+        const response = await fetch(URL+ "?_expand=author");
         const data = await response.json();
         showArticles(data);
       }
 
-        // Fontiond de suppression d'un article
-      async function deleteArticles(){
-        
+      function populateAuthors(data) {
+        const $authorSelect = $("#author").clone();
+          for (author of data) {
+            $authorSelect.append($(
+              `<option value="${author.id}">
+                ${author.name}
+              </option>`))
+          }
+        $("#autorSelect").replaceWith($authorSelect);
       }
+
+      async function getAuthors() {
+        const response = await fetch(AUTHOR_URL);
+        const data = await response.json();
+        populateAuthors(data);
+      }
+
 
       $(document).ready(function () {
         $rowTemplate = $("#template").clone().removeAttr("id");
         getArticles();
+        getAuthors();
 
         // Traitement du formulaire
         $("form").submit(async function (event) {
           event.preventDefault();
 
           const postedData = $(this).serializeObject();
-          console.log(postedData);
 
-           await fetch(URL, {
-            "method": "post",
+          let fetchSettings = {
             headers: {
               "Accept": "Application/json",
               "Content-Type": "Application/json"
             },
-            body: JSON.stringify(postedData),
-          });
+            body: JSON.stringify(postedData)
+          }
 
+          if(choosenArticleId) {
+            fetchSettings.method = "put"
+            await fetch(URL, + "/" + choosenArticleId, fetchSettings);
+            choosenArticleId = null;
+          } else {
+            fetchSettings.method = "post"
+            await fetch(URL, fetchSettings)
+          }
+            
           getArticles();
-          deleteArticles();
         });
 
         // Traitement de la suppression
+        /* Version JavaScript Vanilla 
+        document.querySelector("table").onclick = function(event){
+          console.log("table");
+          if (event.target.classList.contains("delete")) {
+            console.log("delete");
+          }
+        } */
         $("table").delegate(".delete", "click", function (event) {
           const $row = $(this).closest("tr");
           $row.hide(500, function () {
@@ -83,20 +115,28 @@
               "content-type": "application/json"
             }
           })
+
+          // Traitement de la modification
+          
         });
-        /* Version JavaScript Vanilla 
-        document.querySelector("table").onclick = function(event){
-          console.log("table");
-          if (event.target.classList.contains("delete")) {
-            console.log("delete");
+        $("table").delegate(".update", "click", async function (event) {
+          chosenArticleId = $(this).data("id");
+          // Appel à l'API pour récuperer les données
+          const response = await fetch(URL + "/" + chosenArticleId);
+          const data = await response.json();
+
+          // Affichage des données dans le formulaire
+          $("input[name='title']").val(data.title)
+          $("select[name='authorId']").val(data.authorId)
           }
-        } */
+          )
+        
       });
     </script>
   </head>
   <body class="container-fluid">
     <div class="row justify-content-center">
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div class="m-3 form">
           <h2>Nouvel Article</h2>
           <form method="get">
@@ -109,7 +149,12 @@
                 placeholder="le titre"
               />
             </div>
-
+            <div class="mb-3">
+              <label class="form-label">Auteur</label>
+              <select class="form-control" name="authorId" id="authorSelect">
+                
+              </select>
+            </div>
             <div class="mb-3">
               <button type="submit" class="btn btn-primary w-100">
                 Valider
@@ -122,8 +167,10 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>Title</th>
-              <th>Supprimer</th>
+              <th>Titole</th>
+              <th>hoteur</th>
+              <th>Edith</th>
+              <th>Cuprimai</th>
 
             </tr>
           </thead>
@@ -131,10 +178,13 @@
             <tr id="template">
               <td></td>
               <td></td>
+              <td></td>
               <td>
                 <button type="button" class="btn btn-danger delete">DILAITE</button>
               </td>
-
+              <td>
+                <button type="button" class="btn btn-warning update">MAUDIFIER</button>
+              </td>
             </tr>
           </tbody>
         </table>

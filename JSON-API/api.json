@@ -1,16 +1,24 @@
 {
   "articles": [
     {
+      "title": "Bonjour",
       "id": 1,
-      "title": "L'API Fetch en JavaScript"
+      "authorId": 1
     },
     {
+      "title": "Comment",
       "id": 2,
-      "title": "Le Go, faut-il y aller ?"
+      "authorId": 2
     },
     {
-      "title": "j'en ai marre",
-      "id": 3
+      "title": "Tu ",
+      "id": 3,
+      "authorId": 1
+    },
+    {
+      "title": "Vas ?",
+      "id": 4,
+      "authorId": 2
     }
   ],
   "authors": [
